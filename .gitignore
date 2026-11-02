@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+catboost_info/
+
+# Competition data & CTF artefacts (organiser-owned, not redistributed)
+data/
+train_test_splits/
+DataHeist_CTF/
+*.zip
+*.pdf
+*.csv
+*.pcapng
+*.wav
+
+# Generated outputs
+oof/
+submissions/
+*.npy
+*.npz
+*.pkl
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

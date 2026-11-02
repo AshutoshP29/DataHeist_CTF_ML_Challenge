@@ -1,0 +1,27 @@
+import pandas as pd, numpy as np
+pd.set_option('display.width', 250); pd.set_option('display.max_columns', 40)
+D = '../data/'
+A_tr = pd.read_csv(D+'A_ch5_standalone/train.csv'); A_te = pd.read_csv(D+'A_ch5_standalone/test.csv')
+B_tr = pd.read_csv(D+'B_merged_ch5_ch1/train.csv'); B_te = pd.read_csv(D+'B_merged_ch5_ch1/test.csv')
+print(A_tr.shape, A_te.shape, B_tr.shape, B_te.shape)
+print("\n--- B train missing frac"); print(B_tr.isna().mean().round(3).to_string())
+print("\n--- B test missing frac"); print(B_te.isna().mean().round(3)[B_te.isna().mean()>0].to_string())
+print("\n--- src combos train"); print(B_tr.groupby(['src_ch5','src_ch1']).size())
+print("--- src combos test"); print(B_te.groupby(['src_ch5','src_ch1']).size())
+print("\nA lap_id in B train:", A_tr.lap_id.isin(B_tr.lap_id).mean(), " test ids equal:", set(A_te.lap_id)==set(B_te.lap_id))
+print("test lap_ids in train:", B_te.lap_id.isin(B_tr.lap_id).sum())
+print("\n--- target"); print(B_tr.lap_time_sec.describe())
+print("dup lap_id train:", B_tr.lap_id.duplicated().sum())
+print("\n--- describe B train"); print(B_tr.describe().T.round(2))
+for c in ['season','circuit','driver','team','track_status','compound','engine_mode']:
+    print(f"\n--- {c}: train/test value counts")
+    print(pd.concat([B_tr[c].value_counts(dropna=False).rename('tr'), B_te[c].value_counts(dropna=False).rename('te')],axis=1).head(25))
+print("\n--- mean target by circuit"); print(B_tr.groupby('circuit').lap_time_sec.agg(['mean','std','count']).round(2))
+print("\n--- mean target by track_status"); print(B_tr.groupby('track_status').lap_time_sec.agg(['mean','std','count']).round(2))
+print("\n--- mean target by compound"); print(B_tr.groupby('compound').lap_time_sec.agg(['mean','std','count']).round(2))
+num = B_tr.select_dtypes('number').columns.drop(['lap_id'])
+print("\n--- corr with target"); print(B_tr[num].corr()['lap_time_sec'].sort_values().round(3))
+# within-circuit residual correlation
+r = B_tr.lap_time_sec - B_tr.groupby('circuit').lap_time_sec.transform('mean')
+print("\n--- corr with circuit-demeaned target"); print(B_tr[num].corrwith(r).sort_values().round(3))
+print("\nlap_id vs target corr:", np.corrcoef(B_tr.lap_id, B_tr.lap_time_sec)[0,1].round(3))
