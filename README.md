@@ -6,7 +6,7 @@ The task: crack five CTF challenges to unlock five datasets, work out which data
 
 | | |
 |---|---|
-| **Final standing** | 2nd place |
+| **Final standing** | 2nd place, **private-leaderboard RMSE 0.883** |
 | **Best public LB RMSE (this repo)** | 0.907, down from a 1.144 first baseline |
 | **Stack** | Python, pandas, LightGBM, PyTorch (GPU), Optuna, scikit-learn |
 
@@ -96,7 +96,7 @@ wet / rainy laps ──► weather-factor GBM (5 seeds) ────────
 | v7 | **removed ch1 engine_mode leak** | **0.907** |
 | v8 | + 8.4k extra laps from ch2/ch3, honest engine mode | 0.931 |
 
-The final selection was v8 plus a teammate's model, which together placed **2nd** on the private leaderboard.
+The final selection was v8 plus a teammate's model. On the hidden 71% of the test set (the private leaderboard), the team finished **2nd with RMSE 0.883**.
 
 ---
 
